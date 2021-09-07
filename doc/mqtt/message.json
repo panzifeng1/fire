@@ -1,0 +1,74 @@
+{
+    "识别预测": [
+        {
+            "topic": "sys/detect/${deviceId}/on",
+            "data": {
+                "deviceId": "int",
+                "tpye":"int", 
+                "addr":"string",
+                "ip": "string",
+                "username":"string",
+                "password":"string",
+                "channel":"int",
+                "port": {
+                    "cfg": "int",
+                    "rtsp": "int"
+                },
+                "time": "date"
+            },
+            "Qos": "2",
+            "note": "发布待预测设备信息"
+        },
+        {
+            "topic": "sys/detect/${deviceId}/off",
+            "data": {
+                "deviceId": "int",
+                "tpye":"int",
+                "channel":"int",
+                "time": "date"
+            },
+            "Qos": "2",
+            "note": "响应发布待预测设备信息"
+        }
+    ],
+    "告警消息": [
+        {
+            "topic": "sys/detcet/msg/error",
+            "data": {
+                "msg": "string",
+                "time": "date"
+            },
+            "Qos": "0",
+            "note": "模型识别过程中产生错误信息"
+        },
+        {
+            "topic": "sys/detcet/${deviceId}/msg/warning/origin",
+            "data": {
+                "deviceId": "int",
+                "detail": [{
+                    "lable":"int",
+                    "conf":"float",
+                    "site":"string"
+                }],
+                "deviceSite":"string",
+                "path":"string",
+                "time": "date"
+            },
+            "Qos":"0",
+            "note": "发布预警消息(未降噪）"
+        },
+        {
+            "topic": "sys/detcet/${deviceId}/msg/warning/release",
+            "data": {
+                "deviceId": "int",
+                "detail": {
+                    "fire": "int",
+                    "smoke": "int"
+                },
+                "time": "date"
+            },
+            "Qos":"0",
+            "note": "发布预警消息(已降噪）"
+        }
+    ]
+}
