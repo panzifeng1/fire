@@ -4,7 +4,7 @@
             "topic": "sys/detect/${deviceId}/on",
             "data": {
                 "deviceId": "int",
-                "tpye":"int", 
+                "device_type":"int", 
                 "addr":"string",
                 "ip": "string",
                 "username":"string",
