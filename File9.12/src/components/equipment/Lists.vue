@@ -20,8 +20,9 @@
         <template slot-scope="scope">
         <!-- 获取每个数组里的所有数据 -->
         <!-- {{scope.row}} -->
+        <!-- 通过scope.row.id获取某个设备的id -->
           <el-link type="primary">查看</el-link>  
-          <el-link type="primary" @click="showEditDialog()">编辑</el-link>  
+          <el-link type="primary" @click="showEditDialog(scope.row.id)">编辑</el-link>  
           <el-link type="primary" @click="remmoveEquipById(scope.row.id)">删除</el-link> 
         </template>
       </el-table-column>
@@ -60,13 +61,13 @@
       <el-radio label="大华"></el-radio>
     </el-radio-group>
   </el-form-item>
-  <el-form-item label="状态" prop="equipstatus">
+  <!-- <el-form-item label="状态" prop="equipstatus">
     <el-radio-group v-model="addForm.equipstatus">
       <el-radio label="0:未启用"></el-radio>
       <el-radio label="1:离线"></el-radio>
       <el-radio label="2:在线"></el-radio>
     </el-radio-group>
-  </el-form-item>
+  </el-form-item> -->
    <el-form-item label="说明" prop="equipexplain">
     <el-input type="textarea" v-model="addForm.equipexplain"></el-input>
   </el-form-item>
@@ -84,11 +85,18 @@
   title="编辑设备"
   :visible.sync="editDialogVisible"
   width="50%">
-  <!-- <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="活动名称" prop="name">
-    <el-input v-model="ruleForm.name"></el-input>
+  <!-- model:双向数据绑定 rules：验证规则 ref：当前表单的引用对象  -->
+<el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="80px">
+  <el-form-item label="设备号" prop="num">
+    <el-input v-model="editForm.num"></el-input>
   </el-form-item>
-</el-form> -->
+   <el-form-item label="设备名" prop="name">
+    <el-input v-model="editForm.name"></el-input>
+  </el-form-item>
+   <el-form-item label="设备类型" prop="type.name">
+    <el-input v-model="editForm.type.name"></el-input>
+  </el-form-item>
+</el-form>
   <span slot="footer" class="dialog-footer">
     <el-button @click="editDialogVisible = false">取 消</el-button>
     <el-button type="primary" @click="editDialogVisible = false">确 定</el-button>
@@ -168,7 +176,9 @@ export default {
         ]
       },
       // 控制 编辑设备 对话框 的显示与隐藏
-      editDialogVisible: false
+      editDialogVisible: false,
+      // 根据id查询到的设备信息对象（用来保存设备信息）
+      editForm: {}
     }
   },
   created() {
@@ -257,8 +267,14 @@ export default {
       this.getEquipList()
     },
     // 展示编辑设备的 对话框
-    // 根据id查询用户的信息
-    showEditDialog(id) {
+    // 根据id查询用户的信息(点击编辑按钮时，要显示设备基本信息 通过scope.row.id获取某个设备的id)
+    async showEditDialog(id) {
+      console.log(id)
+
+      // 动态数据 用字符串拼接
+      const { data: res } = await this.$http.get('device/seeDevice/' + 'id')
+      console.log(res)
+      this.editForm = res.data
       this.editDialogVisible = true
     }
   }
