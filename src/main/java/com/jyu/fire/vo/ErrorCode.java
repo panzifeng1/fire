@@ -2,10 +2,11 @@ package com.jyu.fire.vo;
 
 public enum ErrorCode {
 
+    NO_LOGIN(400,"用户还未登录"),
     FAIL_UPDATE(400,"更新失败"),
     FAIL_DELETE(400,"删除失败"),
     FAIL_SELECT(400,"查找不到相应的数据"),
-    FAIL_INSERT(10007,"添加失败");
+    FAIL_INSERT(400,"添加失败");
 
     private int code;
     private String msg;
