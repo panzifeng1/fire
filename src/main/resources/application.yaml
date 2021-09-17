@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/fire?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=CONVERT_TO_NULL&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+mybatis-plus:
+  type-aliases-package: com.jyu.fire.pojo
+  mapper-locations: classpath:mapper/**.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 8888

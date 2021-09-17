@@ -1,0 +1,728 @@
+
+[[_paths]]
+== 资源
+
+[[_userapi_resource]]
+=== UserApi
+设备基本信息操作API
+
+
+[[_insertusingpost]]
+==== /addDevice
+....
+POST /device/addDevice
+....
+
+
+===== 说明
+添加设备
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Body**|**device** +
+__必填__|device|<<_device,Device>>
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**201**|Created|无内容
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/addDevice
+----
+
+
+====== 请求 body
+[source,json]
+----
+{
+  "config" : {
+    "string" : "object"
+  },
+  "createTime" : "string",
+  "department_id" : 0,
+  "geoPoint" : "string",
+  "id" : 0,
+  "ip" : "string",
+  "lastTime" : "string",
+  "name" : "string",
+  "note" : "string",
+  "num" : "string",
+  "port" : {
+    "string" : "object"
+  },
+  "status" : 0,
+  "type" : 0
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+[[_addmanagementusingpost]]
+==== /addManagement
+....
+POST /device/addManagement
+....
+
+
+===== 说明
+添加该设备的管理人员
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Body**|**config_name** +
+__必填__|配置信息名称|string
+|**Body**|**device_num** +
+__必填__|设备号|string
+|**Body**|**management_num** +
+__必填__|管理人员编号|string
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**201**|Created|无内容
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/addManagement
+----
+
+
+====== 请求 body
+[source,json]
+----
+{ }
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+[[_deletebynumusingget]]
+==== /deleteDeviceByNum
+....
+GET /device/deleteDeviceByNum
+....
+
+
+===== 说明
+根据设备号删除设备
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Query**|**num** +
+__可选__|num|string
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/deleteDeviceByNum
+----
+
+
+====== 请求 query
+[source,json]
+----
+{
+  "num" : "string"
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+[[_listdeviceusingget]]
+==== /listDevice
+....
+GET /device/listDevice
+....
+
+
+===== 说明
+查询所有设备，以json数组的方式返回
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^4"]
+|===
+|类型|名称|类型
+|**Query**|**page** +
+__可选__|integer (int32)
+|**Query**|**pageSize** +
+__可选__|integer (int32)
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/listDevice
+----
+
+
+====== 请求 query
+[source,json]
+----
+{
+  "page" : 0,
+  "pageSize" : 0
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+[[_selectbynumusingget]]
+==== /selectDeviceByNum
+....
+GET /device/selectDeviceByNum
+....
+
+
+===== 说明
+根据设备号查询设备
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Query**|**num** +
+__可选__|num|string
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/selectDeviceByNum
+----
+
+
+====== 请求 query
+[source,json]
+----
+{
+  "num" : "string"
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+[[_selectbytypeusingget]]
+==== /selectDeviceByType
+....
+GET /device/selectDeviceByType
+....
+
+
+===== 说明
+根据设备类型查询设备
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Query**|**type** +
+__可选__|type|integer (int32)
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/selectDeviceByType
+----
+
+
+====== 请求 query
+[source,json]
+----
+{
+  "type" : 0
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+[[_selectdevicemsgbynumusingget]]
+==== /selectDeviceMsgByNum
+....
+GET /device/selectDeviceMsgByNum
+....
+
+
+===== 说明
+根据设备号查询设备信息
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Body**|**num** +
+__必填__|设备编号|string
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/selectDeviceMsgByNum
+----
+
+
+====== 请求 body
+[source,json]
+----
+{ }
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+[[_selectmanagementusingget]]
+==== /selectManagementByDeviceNum
+....
+GET /device/selectManagementByDeviceNum
+....
+
+
+===== 说明
+根据设备号查询该设备的管理人员
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^9,.^4"]
+|===
+|类型|名称|说明|类型
+|**Query**|**num** +
+__可选__|num|string
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/selectManagementByDeviceNum
+----
+
+
+====== 请求 query
+[source,json]
+----
+{
+  "num" : "string"
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+[[_updatedeviceusingpost]]
+==== /updateDevice
+....
+POST /device/updateDevice
+....
+
+
+===== 说明
+更新设备
+
+
+===== 参数
+
+[options="header", cols=".^2,.^3,.^4"]
+|===
+|类型|名称|类型
+|**Query**|**createTime** +
+__可选__|string (date-time)
+|**Query**|**department_id** +
+__可选__|integer (int32)
+|**Query**|**geoPoint** +
+__可选__|string
+|**Query**|**id** +
+__可选__|integer (int64)
+|**Query**|**ip** +
+__可选__|string
+|**Query**|**lastTime** +
+__可选__|string (date-time)
+|**Query**|**name** +
+__可选__|string
+|**Query**|**note** +
+__可选__|string
+|**Query**|**num** +
+__可选__|string
+|**Query**|**status** +
+__可选__|integer (int32)
+|**Query**|**type** +
+__可选__|integer (int32)
+|===
+
+
+===== 响应
+
+[options="header", cols=".^2,.^14,.^4"]
+|===
+|HTTP代码|说明|类型
+|**200**|OK|<<_c2a89ebe0dfd792bcb7028853529691a,固定返回参数>>
+|**201**|Created|无内容
+|**401**|Unauthorized|无内容
+|**403**|Forbidden|无内容
+|**404**|Not Found|无内容
+|===
+
+
+===== 消耗
+
+* `application/json`
+
+
+===== 生成
+
+* `application/json`
+
+
+===== HTTP请求示例
+
+====== 请求 path
+----
+/device/updateDevice
+----
+
+
+====== 请求 query
+[source,json]
+----
+{
+  "createTime" : "string",
+  "department_id" : 0,
+  "geoPoint" : "string",
+  "id" : 0,
+  "ip" : "string",
+  "lastTime" : "string",
+  "name" : "string",
+  "note" : "string",
+  "num" : "string",
+  "status" : 0,
+  "type" : 0
+}
+----
+
+
+===== HTTP响应示例
+
+====== 响应 200
+[source,json]
+----
+{
+  "code" : 0,
+  "data" : "object",
+  "msg" : "string",
+  "success" : false
+}
+----
+
+
+

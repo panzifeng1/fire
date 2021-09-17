@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jyu.fire.mapper.DeviceMsgMapper">
+
+    <resultMap id="deviceMsg" type="com.jyu.fire.pojo.Device_msg">
+        <result column="msg" typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler" property="msg"/>
+    </resultMap>
+
+    <select id="selectByDeviceId" resultMap="deviceMsg">
+        select dm.* from device_msg dm where dm.device_id=#{id}
+    </select>
+
+</mapper>

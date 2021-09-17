@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jyu.fire.mapper.DeviceMapper">
+
+    <select id="selectById" resultMap="deviceMsg">
+        select * from device where id=#{id}
+    </select>
+
+    <resultMap id="deviceMsg" type="com.jyu.fire.pojo.Device">
+        <result column="config" typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler" property="config"/>
+    </resultMap>
+
+    <select id="selectManagementByDeviceId" resultType="com.jyu.fire.pojo.Management">
+        select m.*
+        from management m
+        where id in (
+            select mdr.management_id
+            from management_device_rel mdr
+            where mdr.device_id=#{id}
+        )
+    </select>
+    
+    <insert id="addDevice_Management">
+        insert into management_device_rel(management_id, device_id, msg_cfg_id) values(
+            (select m.id from management m where m.num=#{management_num}),
+            (select d.id from device d where d.num=#{device_num}),
+            (select c.id from msg_config c where c.name=#{config_name}))
+    </insert>
+
+
+    <delete id="deleteByNum">
+        delete from fire.device where num=#{num}
+    </delete>
+
+
+
+
+
+
+</mapper>

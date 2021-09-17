@@ -1,0 +1,65 @@
+
+[[_definitions]]
+== 定义
+
+[[_device]]
+=== Device
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|名称|说明|类型
+|**config** +
+__可选__|**样例** : `{
+  "string" : "object"
+}`|< string, object > map
+|**createTime** +
+__可选__|**样例** : `"string"`|string (date-time)
+|**department_id** +
+__可选__|**样例** : `0`|integer (int32)
+|**geoPoint** +
+__可选__|**样例** : `"string"`|string
+|**id** +
+__可选__|**样例** : `0`|integer (int64)
+|**ip** +
+__可选__|**样例** : `"string"`|string
+|**lastTime** +
+__可选__|**样例** : `"string"`|string (date-time)
+|**name** +
+__可选__|**样例** : `"string"`|string
+|**note** +
+__可选__|**样例** : `"string"`|string
+|**num** +
+__可选__|**样例** : `"string"`|string
+|**port** +
+__可选__|**样例** : `{
+  "string" : "object"
+}`|< string, object > map
+|**status** +
+__可选__|**样例** : `0`|integer (int32)
+|**type** +
+__可选__|**样例** : `0`|integer (int32)
+|===
+
+
+[[_c2a89ebe0dfd792bcb7028853529691a]]
+=== 固定返回参数
+
+[options="header", cols=".^3,.^11,.^4"]
+|===
+|名称|说明|类型
+|**code** +
+__可选__|错误码，请求失败原因 +
+**样例** : `0`|integer (int32)
+|**data** +
+__可选__|返回的数据 +
+**样例** : `"object"`|object
+|**msg** +
+__可选__|错误提示信息 +
+**样例** : `"string"`|string
+|**success** +
+__可选__|请求状态码，ture成功，false失败 +
+**样例** : `false`|boolean
+|===
+
+
+
