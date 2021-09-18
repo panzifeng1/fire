@@ -109,6 +109,5 @@ public class MQTTConnect {
         MQTTConnect mqttConnect = new MQTTConnect();
         mqttConnect.setMqttClient("admin", "public", new Callback());
         mqttConnect.sub("alert");
-        mqttConnect.pub("topic1", "hello world" + (int) (Math.random() * 100000000));
     }
 }

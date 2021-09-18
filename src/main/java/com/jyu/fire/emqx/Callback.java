@@ -9,13 +9,16 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * 常规MQTT回调函数
  */
 @Slf4j
+@Component
 public class Callback implements MqttCallback {
 
+//    @Autowired
     private SendSms sendSms = new SendSmsImpl();
 
     /**
@@ -43,13 +46,19 @@ public class Callback implements MqttCallback {
         //  TODO    此处可以将订阅得到的消息进行业务处理、数据存储
         log.info("收到来自 " + topic + " 的消息：{}", new String(message.getPayload()));
         //发送短信给用户
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        String msg = new String(message.getPayload());
-//        Mqtt mqtt = objectMapper.readValue(msg, Mqtt.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String msg = new String(message.getPayload());
+        Mqtt mqtt = objectMapper.readValue(msg, Mqtt.class);
         //发送短信的内容拼接设备ID，消息内容，时间
         //手机号码由设备id在数据库中查询得到，暂时写死
 
 
-//        sendSms.send(mqtt.getDeviceId()+"设备,"+mqtt.getMsg()+",时间"+mqtt.getTime(),"18666340204");
+//        boolean success = sendSms.send(mqtt.getDeviceId() + "设备," + mqtt.getMsg() + ",时间" + mqtt.getTime(), "18666340204");
+        boolean success = sendSms.send(mqtt.getMsg(), "18666340204");
+        if (success) {
+            System.out.println("发送成功");
+        }else {
+            System.out.println("发送失败");
+        }
     }
 }

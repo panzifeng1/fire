@@ -16,18 +16,21 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Component
 public class MQTTListener implements ApplicationListener<ContextRefreshedEvent> {
- 
-    private final MQTTConnect server;
 
-    @Autowired
-    public MQTTListener(MQTTConnect server) {
-        this.server = server;
-    }
+
+//    private final MQTTConnect server;
+//    private final Callback callback;
+//
+//    @Autowired
+//    public MQTTListener(MQTTConnect server,Callback callback) {
+//        this.server = server;
+//        this.callback = callback;
+//    }
 
     @Override
-    @PostConstruct
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         try {
+            MQTTConnect server = new MQTTConnect();
             server.setMqttClient("admin", "public", new Callback());
             server.sub("alert");
         } catch (MqttException e) {

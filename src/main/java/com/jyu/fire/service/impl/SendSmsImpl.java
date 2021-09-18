@@ -52,6 +52,7 @@ public class SendSmsImpl implements SendSms {
         try {
             CommonResponse response = client.getCommonResponse(request);
             System.out.println(response.getData());
+            System.out.println("发送短信成功");
             return response.getHttpResponse().isSuccess();
         } catch (ServerException e) {
             e.printStackTrace();
