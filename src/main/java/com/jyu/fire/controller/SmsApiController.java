@@ -24,7 +24,7 @@ public class SmsApiController {
         HashMap<String, Object> param = new HashMap<>();
         param.put("code",code);
 
-        boolean isSend = sendSms.send(phone);
+        boolean isSend = sendSms.send("",phone);
         if (isSend) {
             return phone + ":" + code + " 发送成功";
         }

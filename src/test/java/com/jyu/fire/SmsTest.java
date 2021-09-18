@@ -15,6 +15,6 @@ public class SmsTest {
     private SendSms sms;
     @Test
     public void testSend() {
-        sms.send("18666340204");
+        sms.send("","18666340204");
     }
 }

@@ -19,7 +19,7 @@ import java.util.UUID;
 public class SendSmsImpl implements SendSms {
 
     @Override
-    public boolean send(String phoneNum) {
+    public boolean send(String msg,String phoneNum) {
         //连接阿里云
         DefaultProfile profile = DefaultProfile.getProfile("cn-hangzhou", "LTAIWF9QiqONP95E", "wcr5Kmi2yuTuslRIUJIpvsy2957lmn");
         IAcsClient client = new DefaultAcsClient(profile);
@@ -45,7 +45,7 @@ public class SendSmsImpl implements SendSms {
         /**
          * 发布的短信内容
          */
-        map.put("password",code);
+        map.put("password",msg);
         map.put("phone",phoneNum);
         request.putQueryParameter("TemplateParam", JSONObject.toJSONString(map));
 

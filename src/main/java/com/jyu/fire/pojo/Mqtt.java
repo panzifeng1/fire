@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Mqtt {
     private String deviceId;
+    private String msgType;
     private String msg;
     private String time;
-    private String msgType;
+
 }
