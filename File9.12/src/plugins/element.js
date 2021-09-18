@@ -32,7 +32,10 @@ import {
   Option,
   Link,
   RadioGroup,
-  Radio
+  Radio,
+  Cascader,
+  Tabs,
+  TabPane
 } from 'element-ui'
 
 Vue.use(Button)
@@ -64,7 +67,9 @@ Vue.use(Option)
 Vue.use(Link)
 Vue.use(RadioGroup)
 Vue.use(Radio)
-
+Vue.use(Cascader)
+Vue.use(Tabs)
+Vue.use(TabPane)
 
 // 挂载message弹框组件
 Vue.prototype.$message = Message

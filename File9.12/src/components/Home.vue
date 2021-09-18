@@ -74,6 +74,12 @@
                 <span>设备列表</span>
               </template>
              </el-menu-item>
+              <el-menu-item index="looklist">
+              <template slot="title">
+                 <i class="el-icon-menu"></i>
+                <span>设备查看</span>
+              </template>
+             </el-menu-item>
           </el-submenu>
 
          

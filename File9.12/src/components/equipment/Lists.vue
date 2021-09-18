@@ -5,7 +5,33 @@
       <el-breadcrumb-item>设备管理</el-breadcrumb-item>
       <el-breadcrumb-item>设备列表</el-breadcrumb-item>
    </el-breadcrumb>
+
+
   <el-card>
+  <!-- <span class="demonstration">单选选择任意一级选项</span> -->
+<!-- <div class="block">
+  <el-cascader
+    :options="options"
+    :props="{ checkStrictly: true }"
+    size="small"
+    clearable >
+  </el-cascader>
+  <el-input
+  placeholder="请输入内容"
+  v-model="input"
+  clearable width="50px">
+</el-input>
+</div> -->
+<div style="margin: 20px 0px;">
+  <el-input placeholder="请输入内容" v-model="input3" class="input-with-select"  >
+    <el-select v-model="select" slot="prepend" placeholder="请选择">
+      <el-option label="餐厅名" value="1"></el-option>
+      <el-option label="订单号" value="2"></el-option>
+      <el-option label="用户电话" value="3"></el-option>
+    </el-select>
+    <el-button slot="append" icon="el-icon-search"></el-button>
+  </el-input>
+</div>
     <el-button type="primary" @click="addDialogVisible = true">添加设备</el-button>
 
     <!-- 设备列表 -->
@@ -21,8 +47,8 @@
         <!-- 获取每个数组里的所有数据 -->
         <!-- {{scope.row}} -->
         <!-- 通过scope.row.id获取某个设备的id -->
-          <el-link type="primary">查看</el-link>  
-          <el-link type="primary" @click="showEditDialog(scope.row.id)">编辑</el-link>  
+          <el-link type="primary" @click="gotoLooklist">查看</el-link>  
+          <el-link type="primary" @click="showEditDialog(scope.row)">编辑</el-link>  
           <el-link type="primary" @click="remmoveEquipById(scope.row.id)">删除</el-link> 
         </template>
       </el-table-column>
@@ -84,22 +110,25 @@
 <el-dialog
   title="编辑设备"
   :visible.sync="editDialogVisible"
-  width="50%">
+  width="50%" @close="editDialogClosed">
   <!-- model:双向数据绑定 rules：验证规则 ref：当前表单的引用对象  -->
 <el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="80px">
   <el-form-item label="设备号" prop="num">
     <el-input v-model="editForm.num"></el-input>
   </el-form-item>
-   <el-form-item label="设备名" prop="name">
+   <el-form-item label="设备名"  prop="name">
     <el-input v-model="editForm.name"></el-input>
   </el-form-item>
-   <el-form-item label="设备类型" prop="type.name">
+   <!-- <el-form-item label="设备类型" prop="typeName">
     <el-input v-model="editForm.type.name"></el-input>
+  </el-form-item> -->
+   <el-form-item label="说明" prop="note">
+    <el-input type="textarea" v-model="editForm.note"></el-input>
   </el-form-item>
 </el-form>
   <span slot="footer" class="dialog-footer">
     <el-button @click="editDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="editDialogVisible = false">确 定</el-button>
+    <el-button type="primary" @click="editUserInfo">确 定</el-button>
   </span>
 </el-dialog>
 
@@ -110,13 +139,44 @@
 export default {
   data() {
     return {
+      // activeName: 'second',
+      // options: [
+      //   {
+      //     value: 'shebeihao',
+      //     label: '设备号'
+      //   },
+      //   {
+      //     value: 'shebeiming',
+      //     label: '设备名'
+      //   },
+      //   {
+      //     value: 'shebeileixing',
+      //     label: '设备类型',
+      //     children: [
+      //       {
+      //         value: 'normal',
+      //         label: '一般设备'
+      //       },
+      //       {
+      //         value: 'haikangweishi',
+      //         label: '海康威视'
+      //       },
+      //       {
+      //         value: 'dahua',
+      //         label: '大华'
+      //       }
+      //     ]
+      //   }
+      // ],
       // 获取设备列表参数对象
+      input3: '',
+      select: '',
       queryInfo: {
         query: '',
         // 当前页数
         page: 1,
         // 每页显示条数
-        pageSize: 10
+        pageSize: 5
       },
       // 添加设备参数对象
       equipInfo: {
@@ -177,8 +237,17 @@ export default {
       },
       // 控制 编辑设备 对话框 的显示与隐藏
       editDialogVisible: false,
-      // 根据id查询到的设备信息对象（用来保存设备信息）
-      editForm: {}
+      // 查询到的设备信息对象（用来保存设备信息）
+      editForm: {},
+      // 编辑设备对话框验证规则对象
+      editFormRules: {
+        num: [{ required: true, message: '请输入设备号', trigger: 'blur' }],
+        name: [{ required: true, message: '请输入设备名', trigger: 'blur' }],
+        // typeName: [
+        //   { required: true, message: '请输入设备类型', trigger: 'blur' }
+        // ],
+        note: [{ required: true, message: '请输入设备说明', trigger: 'blur' }]
+      }
     }
   },
   created() {
@@ -268,14 +337,46 @@ export default {
     },
     // 展示编辑设备的 对话框
     // 根据id查询用户的信息(点击编辑按钮时，要显示设备基本信息 通过scope.row.id获取某个设备的id)
-    async showEditDialog(id) {
-      console.log(id)
-
+    async showEditDialog(data) {
+      console.log(data.id)
+      console.log(data)
+      this.editForm = data
+      // this.editForm = scope.row
       // 动态数据 用字符串拼接
-      const { data: res } = await this.$http.get('device/seeDevice/' + 'id')
-      console.log(res)
-      this.editForm = res.data
+      // const { data: res } = await this.$http.get('device/seeDevice/' + 'id')
+      // console.log(res)
+      // this.editForm = res.data
       this.editDialogVisible = true
+    },
+    editDialogClosed() {
+      // 重置整个表单(点击取消按钮后)
+      this.$refs.editFormRef.resetFields()
+    },
+    // 编辑设备信息并提交
+    editUserInfo() {
+      //   // 点击确认按钮进行预验证
+      this.$refs.editFormRef.validate(async valid => {
+        console.log(valid) //true时通过
+        if (!valid) return //校验不通过 直接return
+        // 通过了 发起修改管理员信息的数据请求
+        const { data: res } = await this.$http.post(
+          'device/updateDevice/' + this.editForm.id,
+          {
+            num: this.editForm.num,
+            name: this.editForm.name,
+            note: this.editForm.note
+          }
+        )
+        console.log(res)
+        console.log(res.id)
+        this.editDialogVisible = false
+        // this.getEquipList()
+        this.$message.success('更新设备成功')
+      })
+    },
+    // 点击 查看 跳转到查看页面
+    gotoLooklist() {
+      this.$router.replace('/looklist')
     }
   }
 }
@@ -283,5 +384,18 @@ export default {
 <style lang="less" scoped>
 .el-link {
   margin: 0 10px;
+}
+// .block {
+//   margin: 20px 0;
+//   display: inline-block;
+// }
+// .el-select .el-input {
+//   width: 130px;
+// }
+// .el-select .el-input {
+//   width: 130px ;
+// }
+.input-with-select .el-input-group__prepend {
+  background-color: #fff;
 }
 </style>

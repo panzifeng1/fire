@@ -10,6 +10,7 @@ import News from './components/warn/News.vue'
 import Persons from './components/warn/Persons.vue'
 import Deploys from './components/warn/Deploys.vue'
 import Lists from './components/equipment/Lists.vue'
+import Looklists from './components/equipment/Looklists.vue'
 
 Vue.use(Router)
 
@@ -30,7 +31,8 @@ const router = new Router({
         { path: '/news', component: News },
         { path: '/deploys', component: Deploys },
         { path: '/persons', component: Persons },
-        { path: '/list', component: Lists }
+        { path: '/list', component: Lists },
+        { path: '/looklist', component: Looklists }
 
 
       ]
