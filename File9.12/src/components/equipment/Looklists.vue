@@ -7,7 +7,13 @@
       <el-breadcrumb-item>设备详情</el-breadcrumb-item>
     </el-breadcrumb>
     <el-card>
-     <h1>设备:</h1>
+    <div class="head">
+       <el-link  icon="el-icon-back" :underline="false" style="font-size: 24px" 
+       @click="gotoLists"></el-link>
+      <h1>设备:</h1>
+    </div>
+            <!-- <el-link type="primary" icon="el-icon-back"></el-link> -->
+<!--      <h1></h1> -->
      <p>balabalabalabalabala</p >
 
        <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -68,10 +74,19 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event)
+    },
+    gotoLists() {
+      //   this.$router.go(-1)
+
+      this.$router.push({ path: '/list' })
     }
   }
 }
 </script>
 
 <style scoped>
+.head h1 {
+  display: inline-block;
+  margin: 10px;
+}
 </style>
