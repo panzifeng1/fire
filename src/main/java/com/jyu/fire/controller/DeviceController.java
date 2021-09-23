@@ -40,7 +40,7 @@ public class DeviceController {
 
 
     @PostMapping("/updateDevice")
-    public Result updateDevice(Device device) {
+    public Result updateDevice(@RequestBody Device device) {
         return deviceService.updateDevice(device);
     }
 
@@ -49,13 +49,8 @@ public class DeviceController {
         return deviceService.selectManagement(id);
     }
 
-    /**
-     * 待定
-     * @param management_num
-     * @param device_num
-     * @param config_name
-     * @return
-     */
+
+
     @PostMapping("/addManagement")
     public Result addManagement(String management_num, String device_num, String config_name) {
         return deviceService.addManagement(management_num, device_num, config_name);

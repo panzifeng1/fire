@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jyu.fire.mapper.ManagementMapper">
+
+    <select id="selectPhoneByDeviceId">
+        select phone from management
+        where id in (
+            select management_id from management_device_rel
+            where device_id=#{device_id}
+            )
+    </select>
+</mapper>

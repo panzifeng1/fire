@@ -1,6 +1,7 @@
 package com.jyu.fire.emqx;
  
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jyu.fire.mapper.ManagementMapper;
 import com.jyu.fire.pojo.Mqtt;
 import com.jyu.fire.service.SendSms;
 import com.jyu.fire.service.impl.SendSmsImpl;
@@ -20,6 +21,9 @@ public class Callback implements MqttCallback {
 
 //    @Autowired
     private SendSms sendSms = new SendSmsImpl();
+
+    @Autowired
+    private ManagementMapper managementMapper;
 
     /**
      * MQTT 断开连接会执行此方法
@@ -51,14 +55,14 @@ public class Callback implements MqttCallback {
         Mqtt mqtt = objectMapper.readValue(msg, Mqtt.class);
         //发送短信的内容拼接设备ID，消息内容，时间
         //手机号码由设备id在数据库中查询得到，暂时写死
-
+        String deviceId = mqtt.getDeviceId();
+        String phone = managementMapper.selectPhoneByDeviceId(deviceId);
 
 //        boolean success = sendSms.send(mqtt.getDeviceId() + "设备," + mqtt.getMsg() + ",时间" + mqtt.getTime(), "18666340204");
-        boolean success = sendSms.send(mqtt.getMsg(), "18666340204");
+//        boolean success = sendSms.send(mqtt.getMsg(), "18666340204");
+        boolean success = sendSms.send(mqtt.getMsg(), phone);
         if (success) {
             System.out.println("发送成功");
-        }else {
-            System.out.println("发送失败");
         }
     }
 }
