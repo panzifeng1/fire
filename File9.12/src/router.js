@@ -11,7 +11,11 @@ import Persons from './components/warn/Persons.vue'
 import Deploys from './components/warn/Deploys.vue'
 import Lists from './components/equipment/Lists.vue'
 import Looklists from './components/equipment/Looklists.vue'
-
+import Information from './components/equipment/equipDetails/Information.vue'
+import Message from './components/equipment/equipDetails/Message.vue'
+import Notice from './components/equipment/equipDetails/Notice.vue'
+import Preset from './components/equipment/equipDetails/Preset.vue'
+import Visual from './components/equipment/equipDetails/Visual.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -32,9 +36,12 @@ const router = new Router({
         { path: '/deploys', component: Deploys },
         { path: '/persons', component: Persons },
         { path: '/list', component: Lists },
-        { path: '/looklist', component: Looklists }
-
-
+        { path: '/looklist/:id', component: Looklists },
+        { path: '/looklist/:id/information', component: Information },
+        { path: '/looklist/:id/message', component: Message },
+        { path: '/looklist/:id/notice', component: Notice },
+        { path: '/looklist/:id/preset', component: Preset },
+        { path: '/looklist/:id/visual', component: Visual },
       ]
     }
   ]

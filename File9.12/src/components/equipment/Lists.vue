@@ -6,8 +6,40 @@
       <el-breadcrumb-item>设备列表</el-breadcrumb-item>
    </el-breadcrumb>
 
+<el-card class="box-card">
+  <div  class="text item">
+    <el-row :gutter="20">
+       <el-col :span="6">
+         <div class="grid-content bg-purple">
+           <h4>全部设备</h4>
+           <p>{{total}}</p>
+         </div>
+        </el-col>
+       <el-col :span="6">
+         <div class="grid-content bg-purple">
+          <el-badge is-dot class="item1" type="success">
+            <h4>在线</h4>
+          </el-badge>
+          <p>{{onlineNum}}</p>
+         </div>
+        </el-col>
+       <el-col :span="6">
+         <div class="grid-content bg-purple">
+            <el-badge is-dot class="item1" type="danger"><h4>离线</h4></el-badge>
+             <p>{{uplineNum}}</p>
+         </div>
+        </el-col>
+       <el-col :span="6">
+         <div class="grid-content bg-purple">
+           <el-badge is-dot class="item1" type="primary"><h4>未激活</h4></el-badge>
+            <p>{{nolineNum}}</p>
+          </div>
+        </el-col>
+    </el-row>
+  </div>
+</el-card>
 
-  <el-card>
+ <el-card>
   <!-- <span class="demonstration">单选选择任意一级选项</span> -->
 <!-- <div class="block">
   <el-cascader
@@ -47,7 +79,7 @@
         <!-- 获取每个数组里的所有数据 -->
         <!-- {{scope.row}} -->
         <!-- 通过scope.row.id获取某个设备的id -->
-          <el-link type="primary" @click="gotoLooklist">查看</el-link>  
+          <el-link type="primary" @click="gotoLooklist(scope.row.id)">查看</el-link>  
           <el-link type="primary" @click="showEditDialog(scope.row)">编辑</el-link>  
           <el-link type="primary" @click="remmoveEquipById(scope.row.id)">删除</el-link> 
         </template>
@@ -186,7 +218,16 @@ export default {
         note: ''
       },
       equiplist: [],
+      // 总数
       total: 0,
+      // 设备状态
+      // statusNum: 0,
+      // 在线设备数
+      onlineNum: 0,
+      // 离线设备数
+      uplineNum: 0,
+      // 未激活设备数
+      nolineNum: 0,
       // 控制添加设备对话框的显示与隐藏
       addDialogVisible: false,
       // 添加设备的表单数据
@@ -239,6 +280,7 @@ export default {
       editDialogVisible: false,
       // 查询到的设备信息对象（用来保存设备信息）
       editForm: {},
+      editName: '',
       // 编辑设备对话框验证规则对象
       editFormRules: {
         num: [{ required: true, message: '请输入设备号', trigger: 'blur' }],
@@ -341,6 +383,7 @@ export default {
       console.log(data.id)
       console.log(data)
       this.editForm = data
+      this.editName = data.name
       // this.editForm = scope.row
       // 动态数据 用字符串拼接
       // const { data: res } = await this.$http.get('device/seeDevice/' + 'id')
@@ -375,8 +418,9 @@ export default {
       })
     },
     // 点击 查看 跳转到查看页面
-    gotoLooklist() {
-      this.$router.replace('/looklist')
+    gotoLooklist(id) {
+      // /looklist/id
+      this.$router.replace('/looklist/' + id)
     }
   }
 }
@@ -397,5 +441,45 @@ export default {
 // }
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
+}
+.box-card {
+  margin: 10px 0;
+}
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.text {
+  width: 800px;
+}
+.el-col {
+  border-radius: 4px;
+}
+.bg-purple-dark {
+  background: #ffffff;
+}
+.bg-purple {
+  background: #ffff;
+}
+.bg-purple-light {
+  background: #e5e9f2;
+}
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+.row-bg {
+  padding: 10px 0;
+  background-color: #f9fafc;
+}
+.item1 {
+  // background-color: green;
+  margin-right: 40px;
+}
+.box-card h4 {
+  margin: 0px;
+  padding: 0px;
 }
 </style>

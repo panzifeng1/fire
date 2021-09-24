@@ -17,7 +17,7 @@ export default {
     return {}
   },
   created() {},
-  method() {}
+  method: {}
 }
 </script>
 <style lang="less" scoped></style>
