@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DepartmentMapper extends BaseMapper<Department> {
     String selectDepartmentNameById(int id);
+
+    int selectIdByName(String name);
+
 }

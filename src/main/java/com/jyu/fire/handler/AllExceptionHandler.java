@@ -13,6 +13,6 @@ public class AllExceptionHandler {
     @ResponseBody   //返回json数据
     public Result doException(Exception ex) {
         ex.printStackTrace();
-        return Result.fail(-999,"系统异常");
+        return Result.fail("系统异常");
     }
 }

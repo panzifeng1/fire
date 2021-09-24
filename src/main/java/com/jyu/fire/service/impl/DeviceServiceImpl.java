@@ -33,7 +33,7 @@ public class DeviceServiceImpl implements DeviceService {
         if (result == 1) {
             return Result.success("新增成功");
         }
-        return Result.fail(ErrorCode.FAIL_INSERT.getCode(),ErrorCode.FAIL_INSERT.getMsg());
+        return Result.fail(ErrorCode.FAIL_INSERT.getMsg());
     }
 
     /**
@@ -45,7 +45,7 @@ public class DeviceServiceImpl implements DeviceService {
     public Result selectDeviceById(int id) {
         Device device = deviceMapper.selectById(id);
         if (device == null) {
-            return Result.fail(ErrorCode.FAIL_SELECT.getCode(),ErrorCode.FAIL_SELECT.getMsg());
+            return Result.fail(ErrorCode.FAIL_SELECT.getMsg());
         }
         DeviceVo deviceVo = copy(device);
         return Result.success(deviceVo);
@@ -63,7 +63,7 @@ public class DeviceServiceImpl implements DeviceService {
         if (result == 1) {
             return Result.success("更新成功");
         }
-        return Result.fail(ErrorCode.FAIL_UPDATE.getCode(),ErrorCode.FAIL_UPDATE.getMsg());
+        return Result.fail(ErrorCode.FAIL_UPDATE.getMsg());
     }
 
 
@@ -73,7 +73,7 @@ public class DeviceServiceImpl implements DeviceService {
         if (result == 1) {
             return Result.success("删除成功");
         }
-        return Result.fail(ErrorCode.FAIL_DELETE.getCode(),ErrorCode.FAIL_DELETE.getMsg());
+        return Result.fail(ErrorCode.FAIL_DELETE.getMsg());
     }
 
     @Override
@@ -105,7 +105,7 @@ public class DeviceServiceImpl implements DeviceService {
     public Result selectDeviceMsgById(int id) {
         DeviceMsg device_msg = deviceMsgMapper.selectByDeviceId(id);
         if (device_msg == null) {
-            return Result.fail(ErrorCode.FAIL_SELECT.getCode(),ErrorCode.FAIL_SELECT.getMsg());
+            return Result.fail(ErrorCode.FAIL_SELECT.getMsg());
         }
         return Result.success(device_msg);
     }
@@ -123,7 +123,7 @@ public class DeviceServiceImpl implements DeviceService {
         if (result == 1) {
             return Result.success("添加设备关联人成功");
         }
-        return Result.fail(ErrorCode.FAIL_INSERT.getCode(),ErrorCode.FAIL_INSERT.getMsg());
+        return Result.fail(ErrorCode.FAIL_INSERT.getMsg());
     }
 
     /**
@@ -138,7 +138,7 @@ public class DeviceServiceImpl implements DeviceService {
         ManagementVo managementVo = copy(management);
         managementVo.setDepartment(departmentService.selectDepartmentNameById(management.getDepartmentId()));
         if (managementVo == null) {
-            return Result.fail(ErrorCode.FAIL_SELECT.getCode(),ErrorCode.FAIL_SELECT.getMsg());
+            return Result.fail(ErrorCode.FAIL_SELECT.getMsg());
         }
         return Result.success(managementVo);
     }

@@ -20,7 +20,7 @@ public class CustomizeAuthenticationFailureHandler implements AuthenticationFail
         Result result = null;
         if (e instanceof BadCredentialsException) {
             //账号密码错误
-            result = Result.fail(ErrorCode.FAIL_SELECT.getCode(),ErrorCode.FAIL_SELECT.getMsg());
+            result = Result.fail(ErrorCode.FAIL_SELECT.getMsg());
         }
 
         httpServletResponse.setContentType("text/json;charset=utf-8");

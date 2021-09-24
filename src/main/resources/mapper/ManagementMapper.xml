@@ -11,4 +11,24 @@
             where device_id=#{device_id}
             )
     </select>
+    
+    <select id="select" resultType="com.jyu.fire.pojo.Management">
+        select * from management
+            <where>
+                <if test="num!=null and num!=''">
+                    num={num}
+                </if>
+                <if test="name!=null and name!=''">
+                    and name=#{name}
+                </if>
+                <if test="departmentId!=null">
+                    and department_id={departmentId}
+                </if>
+            </where>
+    </select>
+
+    <select id="selectByNum" resultType="com.jyu.fire.pojo.Management">
+        select * from management
+        where num=#{num}
+    </select>
 </mapper>

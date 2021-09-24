@@ -16,7 +16,7 @@ import java.io.IOException;
 public class CustomizeAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException, ServletException {
-        Result result = Result.fail(ErrorCode.FAIL_INSERT.getCode(), ErrorCode.FAIL_INSERT.getMsg());
+        Result result = Result.fail(ErrorCode.FAIL_INSERT.getMsg());
         httpServletResponse.setContentType("text/json;charset=utf-8");
         httpServletResponse.getWriter().write(JSON.toJSONString(result));
     }
