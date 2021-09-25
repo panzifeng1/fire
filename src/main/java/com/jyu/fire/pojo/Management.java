@@ -14,13 +14,14 @@ import java.math.BigInteger;
 
 import java.sql.Timestamp;
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Management {
     @TableId(value = "id",type = IdType.AUTO)
-    private Long id;
+    private Integer id;
     private String num;
     private String name;
     private String note;
@@ -29,6 +30,6 @@ public class Management {
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private LocalDateTime createTime;
     private Integer status;
 }

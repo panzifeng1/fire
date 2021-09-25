@@ -28,9 +28,6 @@ public class ManagementServiceImpl implements ManagementService {
     DepartmentMapper departmentMapper;
 
 
-
-
-
     @Override
     public Result listManagement(PageParams pageParams) {
         //使用mp分页查询出management表
@@ -45,10 +42,17 @@ public class ManagementServiceImpl implements ManagementService {
 
     @Override
     public Result select(ManagementVo managementVo) {
+        //将前端传过来的数据转换为后端对应表的数据，主要是部门ID跟部门名称的对应
         Management copy = copy(managementVo);
-        Management management = managementMapper.select(copy);
-        if (management != null) {
-            return Result.success(management);
+        List<Management> select = managementMapper.select(copy);
+        //查询不到数据
+        if (select == null) {
+            return Result.fail("查询不到该人员信息");
+        }
+        //将查询到的数据重新封装为前端数据返回
+        List<ManagementVo> managementVoList = copyList(select);
+        if (managementVoList != null) {
+            return Result.success(managementVoList);
         }
         return Result.fail("查询不到该人员信息");
     }
@@ -64,7 +68,15 @@ public class ManagementServiceImpl implements ManagementService {
 
     @Override
     public Result insert(ManagementVo managementVo) {
+        //在添加之前先判断是否已存在该人员编号
+        Management selectByNum = managementMapper.selectByNum(managementVo.getNum());
+        if (selectByNum != null) {
+            return Result.fail("该人员编号已存在，不可重复添加");
+        }
+
         Management management = copy(managementVo);
+        management.setStatus(0);
+
         int insert = managementMapper.insert(management);
         if (insert == 1) {
             return Result.success(null);
@@ -74,10 +86,16 @@ public class ManagementServiceImpl implements ManagementService {
 
     @Override
     public Result update(ManagementVo managementVo) {
+        Management selectByNum = managementMapper.selectByNum(managementVo.getNum());
+        if (selectByNum != null) {
+            return Result.fail("该人员编号已存在，修改失败");
+        }
         Management management = copy(managementVo);
         int update = managementMapper.updateById(management);
         if (update == 1) {
-            return Result.success(managementMapper.selectById(management.getId()));
+            Management management1 = managementMapper.selectById(management.getId());
+            ManagementVo copy = copy(management1);
+            return Result.success(copy);
         }
         return Result.fail("更新成功");
     }
@@ -105,7 +123,10 @@ public class ManagementServiceImpl implements ManagementService {
         Management management = new Management();
         BeanUtils.copyProperties(managementVo,management);
         //根据部门名称查询出该部门的Id
-        management.setId((long) departmentMapper.selectIdByName(managementVo.getDepartment()));
+        String departmentName = managementVo.getDepartment();
+        if (departmentName != "") {
+            management.setDepartmentId(departmentMapper.selectIdByName(managementVo.getDepartment()));
+        }
         return management;
     }
 

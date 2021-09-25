@@ -9,7 +9,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Result {
     private int code;
-    private String msg;
+    private String message;
     private Object data;
 
 
@@ -17,7 +17,7 @@ public class Result {
         return new Result(200,"success",data);
     }
 
-    public static Result fail(String msg) {
-        return new Result(400,msg,null);
+    public static Result fail(String message) {
+        return new Result(400,message,null);
     }
 }

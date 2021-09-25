@@ -4,12 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jyu.fire.mapper.DepartmentMapper">
 
-    <select id="selectDepartmentNameById">
-        select name from department where id={id}
+    <select id="selectDepartmentNameById" resultType="String">
+        select name from department where id=#{id}
     </select>
 
-    <select id="selectIdByName">
-        select id from department where name={name}
+    <select id="selectIdByName" resultType="int">
+        select id from department where name=#{name}
     </select>
 
 

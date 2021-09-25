@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
+import java.util.List;
 
 
 @Mapper
@@ -14,7 +15,7 @@ import java.math.BigInteger;
 public interface ManagementMapper extends BaseMapper<Management> {
     String selectPhoneByDeviceId(String device_id);
 
-    Management select(Management management);
+    List<Management> select(Management management);
 
-    Management selectByNum(int num);
+    Management selectByNum(String num);
 }
