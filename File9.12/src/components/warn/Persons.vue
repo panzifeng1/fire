@@ -9,6 +9,7 @@
 
     <!-- 卡片视图 -->
     <el-card>
+<<<<<<< HEAD
       <el-form :inline="true" class="demo-form-inline">
         <el-form-item  >
         <el-input  placeholder="请输入员工名称" clearable @clear="getUserList"></el-input>
@@ -116,12 +117,18 @@
             <el-button type="primary" @click="editUserInfo">确 定</el-button>
           </span>
         </el-dialog>
+=======
+    </el-card>
+
+   
+>>>>>>> f1942928fb5f19ad68b359c0000b4d499cb532bd
   </div>
 </template>
 
 <script>
 export default {
   data() {
+<<<<<<< HEAD
     return {
       apartment: '',
       // 获取员工列表的参数对象
@@ -290,6 +297,12 @@ export default {
       this.getUserList()
     }
   }
+=======
+    return {}
+  },
+  created() {},
+  methods: {}
+>>>>>>> f1942928fb5f19ad68b359c0000b4d499cb532bd
 }
 </script>
 
