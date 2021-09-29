@@ -1,6 +1,7 @@
 package com.jyu.fire.service;
 
 import com.jyu.fire.pojo.Device;
+import com.jyu.fire.pojo.ManagementDeviceRel;
 import com.jyu.fire.vo.ListResult;
 import com.jyu.fire.vo.Result;
 import com.jyu.fire.vo.params.PageParams;
@@ -28,7 +29,7 @@ public interface DeviceService {
     Result selectDeviceMsgById(int id);
 
     //新增当前设备的关联人
-    Result addManagement(String management_num,String device_num,String config_name);
+    Result addManagement(ManagementDeviceRel managementDeviceRel);
 
     //根据设备号查询当前管理设备的人
     Result selectManagement(int id);

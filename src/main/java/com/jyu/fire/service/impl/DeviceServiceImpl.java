@@ -1,14 +1,15 @@
 package com.jyu.fire.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jyu.fire.mapper.DepartmentMapper;
 import com.jyu.fire.mapper.DeviceMapper;
 import com.jyu.fire.mapper.DeviceMsgMapper;
-import com.jyu.fire.pojo.DepartmentNameAndId;
-import com.jyu.fire.pojo.Device;
-import com.jyu.fire.pojo.DeviceMsg;
-import com.jyu.fire.pojo.Management;
+import com.jyu.fire.mapper.ManagementDeviceRelMapper;
+import com.jyu.fire.pojo.*;
 import com.jyu.fire.service.DepartmentService;
 import com.jyu.fire.service.DeviceService;
 import com.jyu.fire.vo.*;
@@ -31,6 +32,8 @@ public class DeviceServiceImpl implements DeviceService {
     private DepartmentService departmentService;
     @Autowired
     private DepartmentMapper departmentMapper;
+    @Autowired
+    private ManagementDeviceRelMapper managementDeviceRelMapper;
 
     @Override
     public Result insert(Device device) {
@@ -147,9 +150,22 @@ public class DeviceServiceImpl implements DeviceService {
      * 添加该设备的相关管理人员。待定
      */
     @Override
-    public Result addManagement(String management_num, String device_num, String config_name) {
-        int result = deviceMapper.addDevice_Management(management_num, device_num, config_name);
-        if (result == 1) {
+    public Result addManagement(ManagementDeviceRel managementDeviceRel) {
+        Integer managementId = managementDeviceRel.getManagementId();
+        Integer deviceId = managementDeviceRel.getDeviceId();
+        List<MsgCfg> msgCfg = managementDeviceRel.getMsgCfg();
+        String s = JSON.toJSONString(msgCfg);
+        List<MsgType> msgType = managementDeviceRel.getMsgType();
+        String s1 = JSON.toJSONString(msgType);
+
+        //插入之前先在数据库中查询该设备是否已经关联了某个关联人
+        ManagementDeviceRel selectByPrimaryKey = managementDeviceRelMapper.selectByPrimaryKey(managementId, deviceId);
+        if (selectByPrimaryKey != null) {
+            return Result.fail("添加失败，该设备已经存在相关关联人");
+        }
+
+        int i = managementDeviceRelMapper.insertManagement(managementId, deviceId, s, s1);
+        if (i == 1) {
             return Result.success(null);
         }
         return Result.fail("添加设备关联人失败");

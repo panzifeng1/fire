@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jyu.fire.mapper.ManagementDeviceRelMapper">
+    <insert id="insertManagement">
+        insert into management_device_rel values(#{managementId},#{deviceId},#{msgCfg},#{msgType})
+    </insert>
+
+    <select id="selectByPrimaryKey" resultType="com.jyu.fire.pojo.ManagementDeviceRel">
+        select * from management_device_rel where management_id=#{managementId} and device_id=#{deviceId}
+    </select>
+</mapper>

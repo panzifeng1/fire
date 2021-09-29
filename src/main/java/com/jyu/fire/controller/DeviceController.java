@@ -1,6 +1,7 @@
 package com.jyu.fire.controller;
 
 import com.jyu.fire.pojo.Device;
+import com.jyu.fire.pojo.ManagementDeviceRel;
 import com.jyu.fire.service.DeviceService;
 import com.jyu.fire.vo.ErrorCode;
 import com.jyu.fire.vo.ListResult;
@@ -53,8 +54,8 @@ public class DeviceController {
 
 
     @RequestMapping("/addManagement")
-    public Result addManagement(String management_num, String device_num, String config_name) {
-        return deviceService.addManagement(management_num, device_num, config_name);
+    public Result addManagement(@RequestBody ManagementDeviceRel managementDeviceRel) {
+        return deviceService.addManagement(managementDeviceRel);
     }
 
 
