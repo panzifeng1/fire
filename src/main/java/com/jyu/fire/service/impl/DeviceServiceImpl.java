@@ -2,8 +2,10 @@ package com.jyu.fire.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jyu.fire.mapper.DepartmentMapper;
 import com.jyu.fire.mapper.DeviceMapper;
 import com.jyu.fire.mapper.DeviceMsgMapper;
+import com.jyu.fire.pojo.DepartmentNameAndId;
 import com.jyu.fire.pojo.Device;
 import com.jyu.fire.pojo.DeviceMsg;
 import com.jyu.fire.pojo.Management;
@@ -15,6 +17,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -25,15 +29,23 @@ public class DeviceServiceImpl implements DeviceService {
     private DeviceMsgMapper deviceMsgMapper;
     @Autowired
     private DepartmentService departmentService;
+    @Autowired
+    private DepartmentMapper departmentMapper;
 
     @Override
     public Result insert(Device device) {
-
+        //判断该设备号在数据库中是否已经存在
+        if (existDevice(device.getNum())) {
+            return Result.fail("新增失败，数据库中已存在该设备");
+        }
+        //新增的设备默认为未激活状态
+        device.setStatus(0);
         int result = deviceMapper.insert(device);
         if (result == 1) {
-            return Result.success("新增成功");
+            DeviceVo deviceVo = copy(deviceMapper.selectLastOne());
+            return Result.success(deviceVo);
         }
-        return Result.fail(ErrorCode.FAIL_INSERT.getMsg());
+        return Result.fail("新增失败");
     }
 
     /**
@@ -44,11 +56,11 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Result selectDeviceById(int id) {
         Device device = deviceMapper.selectById(id);
-        if (device == null) {
-            return Result.fail(ErrorCode.FAIL_SELECT.getMsg());
+        if (device != null) {
+            DeviceVo deviceVo = copy(device);
+            return Result.success(deviceVo);
         }
-        DeviceVo deviceVo = copy(device);
-        return Result.success(deviceVo);
+        return Result.fail("查找不到该设备");
     }
 
 
@@ -59,11 +71,27 @@ public class DeviceServiceImpl implements DeviceService {
      */
     @Override
     public Result updateDevice(Device device) {
+        //判断该设备号在数据库中是否已经存在
+        if (device.getNum()!="" && device.getNum()!=" ") {
+            if (existDevice(device.getNum())) {
+                return Result.fail("更新失败，设备号不能重复");
+            }
+        }
+        //更新最后在线时间
+        int oldStatus = deviceMapper.selectStatusById(device.getId());
+        int newStatus = device.getStatus();
+        if (oldStatus == 2 && newStatus == 1) {
+            //从在线转换为离线，更新最后在线时间
+            LocalDateTime now = LocalDateTime.now();
+            device.setLastOnlineTime(now);
+        }
         int result = deviceMapper.updateById(device);
         if (result == 1) {
-            return Result.success("更新成功");
+            Device device1 = deviceMapper.selectById(device.getId());
+            DeviceVo deviceVo = copy(device1);
+            return Result.success(deviceVo);
         }
-        return Result.fail(ErrorCode.FAIL_UPDATE.getMsg());
+        return Result.fail("更新失败");
     }
 
 
@@ -71,29 +99,34 @@ public class DeviceServiceImpl implements DeviceService {
     public Result deleteById(int id) {
         int result = deviceMapper.deleteById(id);
         if (result == 1) {
-            return Result.success("删除成功");
+            return Result.success(null);
         }
-        return Result.fail(ErrorCode.FAIL_DELETE.getMsg());
+        return Result.fail("删除失败");
     }
 
+    /**
+     * 分页查询device表
+     */
     @Override
-    public Result listDevice(PageParams pageParams) {
-        /**
-         * 分页查询device表
-         */
+    public ListResult listDevice(PageParams pageParams) {
         Page<Device> page = new Page<>(pageParams.getPage(),pageParams.getPageSize());
         LambdaQueryWrapper<Device> queryWrapper = new LambdaQueryWrapper<>();
-        //是否启用进行排序
+        //根据设备号进行排序
         queryWrapper.orderByDesc(Device::getNum);
         Page<Device> devicePage = deviceMapper.selectPage(page, queryWrapper);
         List<Device> records = devicePage.getRecords();
         //需要将内容转换成自定义的vo对象进行返回
         List<DeviceVo> deviceVoList = copyList(records);
-        //返回设备总数，设备在线数量、设备离线数量、设备未激活数量，当前是第几页，总页数
-        //在数据库中分别查count(*) from device where status = {status}
-
-//        return ListResult.success(deviceVoList);
-        return null;
+        //设备总数
+        long total = devicePage.getTotal();
+        //总页数
+        long pages = devicePage.getPages();
+        //当前页数
+        long current = devicePage.getCurrent();
+        int notActive = deviceMapper.selectCountByStatus(0);
+        int offLine = deviceMapper.selectCountByStatus(1);
+        int onLine = deviceMapper.selectCountByStatus(2);
+        return ListResult.success(deviceVoList,total,current,pages,onLine,offLine,notActive);
     }
 
     /**
@@ -105,25 +138,21 @@ public class DeviceServiceImpl implements DeviceService {
     public Result selectDeviceMsgById(int id) {
         DeviceMsg device_msg = deviceMsgMapper.selectByDeviceId(id);
         if (device_msg == null) {
-            return Result.fail(ErrorCode.FAIL_SELECT.getMsg());
+            return Result.fail("查询失败");
         }
         return Result.success(device_msg);
     }
 
     /**
      * 添加该设备的相关管理人员。待定
-     * @param management_num
-     * @param device_num
-     * @param config_name
-     * @return
      */
     @Override
     public Result addManagement(String management_num, String device_num, String config_name) {
         int result = deviceMapper.addDevice_Management(management_num, device_num, config_name);
         if (result == 1) {
-            return Result.success("添加设备关联人成功");
+            return Result.success(null);
         }
-        return Result.fail(ErrorCode.FAIL_INSERT.getMsg());
+        return Result.fail("添加设备关联人失败");
     }
 
     /**
@@ -134,13 +163,31 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public Result selectManagement(int id) {
         Management management = deviceMapper.selectManagementByDeviceId(id);
+        if (management == null) {
+            return Result.fail("查询不到设备相关关联人");
+        }
         //根据设备相关人查询出该设备人所属部门
         ManagementVo managementVo = copy(management);
         managementVo.setDepartment(departmentService.selectDepartmentNameById(management.getDepartmentId()));
         if (managementVo == null) {
-            return Result.fail(ErrorCode.FAIL_SELECT.getMsg());
+            return Result.fail("查询不到设备相关关联人");
         }
         return Result.success(managementVo);
+    }
+
+    @Override
+    public Result selectDepartments() {
+        List<DepartmentNameAndId> departmentNameAndIds = departmentMapper.selectAll();
+        return Result.success(departmentNameAndIds);
+    }
+
+    /**
+     * 判断数据库中是否已经存在该设备，存在返回true，不存在返回false
+     */
+    private boolean existDevice(String num) {
+        Device device = deviceMapper.selectByNum(num);
+        if (device == null) return false;
+        return true;
     }
 
     private List<DeviceVo> copyList(List<Device> records) {
@@ -155,9 +202,24 @@ public class DeviceServiceImpl implements DeviceService {
         DeviceVo deviceVo = new DeviceVo();
         //将device的内容copy到vo对象中
         BeanUtils.copyProperties(device,deviceVo);
-        if (device.getType() == 0) {
-
+        String departmentName = departmentMapper.selectDepartmentNameById(device.getDepartmentId());
+        deviceVo.setDepartment(departmentName);
+        //设备类型
+        DeviceType deviceType = new DeviceType();
+        Integer type = device.getType();
+        if (type == 0) {
+            deviceType.setType(type);
+            deviceType.setTypeName("一般设备");
         }
+        if (type == 1) {
+            deviceType.setType(type);
+            deviceType.setTypeName("海康威视");
+        }
+        if (type == 2) {
+            deviceType.setType(type);
+            deviceType.setTypeName("大华");
+        }
+        deviceVo.setDeviceType(deviceType);
         return deviceVo;
     }
 

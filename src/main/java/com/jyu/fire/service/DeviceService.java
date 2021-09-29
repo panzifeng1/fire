@@ -1,6 +1,7 @@
 package com.jyu.fire.service;
 
 import com.jyu.fire.pojo.Device;
+import com.jyu.fire.vo.ListResult;
 import com.jyu.fire.vo.Result;
 import com.jyu.fire.vo.params.PageParams;
 
@@ -21,7 +22,7 @@ public interface DeviceService {
     Result deleteById(int id);
 
     //设备列表
-    Result listDevice(PageParams pageParams);
+    ListResult listDevice(PageParams pageParams);
 
     //根据设备id查询当前设备的告警信息
     Result selectDeviceMsgById(int id);
@@ -31,4 +32,7 @@ public interface DeviceService {
 
     //根据设备号查询当前管理设备的人
     Result selectManagement(int id);
+
+    //查询所有部门id和部门名称
+    Result selectDepartments();
 }

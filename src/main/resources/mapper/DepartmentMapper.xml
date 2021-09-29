@@ -12,5 +12,7 @@
         select id from department where name=#{name}
     </select>
 
-
+    <select id="selectAll" resultType="com.jyu.fire.pojo.DepartmentNameAndId">
+        select id,name from department
+    </select>
 </mapper>

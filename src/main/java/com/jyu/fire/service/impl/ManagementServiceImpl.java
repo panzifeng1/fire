@@ -9,6 +9,7 @@ import com.jyu.fire.pojo.Management;
 import com.jyu.fire.service.DepartmentService;
 import com.jyu.fire.service.ManagementService;
 import com.jyu.fire.vo.DeviceVo;
+import com.jyu.fire.vo.ListManagementResult;
 import com.jyu.fire.vo.ManagementVo;
 import com.jyu.fire.vo.Result;
 import com.jyu.fire.vo.params.PageParams;
@@ -29,15 +30,17 @@ public class ManagementServiceImpl implements ManagementService {
 
 
     @Override
-    public Result listManagement(PageParams pageParams) {
+    public ListManagementResult listManagement(PageParams pageParams) {
         //使用mp分页查询出management表
         Page<Management> page = new Page<>(pageParams.getPage(),pageParams.getPageSize());
         Page<Management> managementPage = managementMapper.selectPage(page, null);
         List<Management> records = managementPage.getRecords();
         //将内容转换为vo对象
         List<ManagementVo> managementVoList = copyList(records);
-
-        return Result.success(managementVoList);
+        long total = managementPage.getTotal();
+        long current = managementPage.getCurrent();
+        long pages = managementPage.getPages();
+        return ListManagementResult.success(managementVoList,total,current,pages);
     }
 
     @Override

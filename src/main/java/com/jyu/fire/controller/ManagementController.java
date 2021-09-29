@@ -1,6 +1,7 @@
 package com.jyu.fire.controller;
 
 import com.jyu.fire.service.ManagementService;
+import com.jyu.fire.vo.ListManagementResult;
 import com.jyu.fire.vo.ManagementVo;
 import com.jyu.fire.vo.Result;
 import com.jyu.fire.vo.params.PageParams;
@@ -17,7 +18,7 @@ public class ManagementController {
     ManagementService managementService;
 
     @RequestMapping("/list")
-    public Result list(PageParams pageParams) {
+    public ListManagementResult list(PageParams pageParams) {
         return managementService.listManagement(pageParams);
     }
 

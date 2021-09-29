@@ -2,6 +2,7 @@ package com.jyu.fire;
 
 import com.jyu.fire.controller.ManagementController;
 import com.jyu.fire.service.ManagementService;
+import com.jyu.fire.vo.ListManagementResult;
 import com.jyu.fire.vo.ManagementVo;
 import com.jyu.fire.vo.Result;
 import com.jyu.fire.vo.params.PageParams;
@@ -68,7 +69,7 @@ public class ManagementTest {
 
     @Test
     public void testList() {
-        Result result = managementService.listManagement(new PageParams());
+        ListManagementResult result = managementService.listManagement(new PageParams());
         System.out.println(result);
     }
 

@@ -1,6 +1,7 @@
 package com.jyu.fire.service;
 
 import com.jyu.fire.pojo.Management;
+import com.jyu.fire.vo.ListManagementResult;
 import com.jyu.fire.vo.ManagementVo;
 import com.jyu.fire.vo.Result;
 import com.jyu.fire.vo.params.PageParams;
@@ -11,7 +12,7 @@ public interface ManagementService {
     /**
      * 获取人员列表
      */
-    Result listManagement(PageParams pageParams);
+    ListManagementResult listManagement(PageParams pageParams);
 
     /**
      * 查询人员信息

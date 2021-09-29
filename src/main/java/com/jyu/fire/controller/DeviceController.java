@@ -3,6 +3,7 @@ package com.jyu.fire.controller;
 import com.jyu.fire.pojo.Device;
 import com.jyu.fire.service.DeviceService;
 import com.jyu.fire.vo.ErrorCode;
+import com.jyu.fire.vo.ListResult;
 import com.jyu.fire.vo.Result;
 import com.jyu.fire.vo.params.PageParams;
 import io.swagger.annotations.*;
@@ -16,42 +17,42 @@ public class DeviceController {
     @Autowired
     private DeviceService deviceService;
 
-    @PostMapping("/addDevice")
+    @RequestMapping("/addDevice")
     public Result insert(@RequestBody Device device) {
         return deviceService.insert(device);
     }
 
-    @GetMapping("/seeDevice/{id}")
+    @RequestMapping("/seeDevice/{id}")
     public Result selectByNum(@PathVariable("id") int id) {
         return deviceService.selectDeviceById(id);
     }
 
 
-    @GetMapping("/deleteDevice/{id}")
-    public Result deleteByNum(@PathVariable("id") int id) {
+    @RequestMapping("/deleteDevice/{id}")
+    public Result delete(@PathVariable("id") int id) {
         return deviceService.deleteById(id);
     }
 
     //查询设备列表
-    @GetMapping("/listDevice")
-    public Result listDevice(PageParams pageParams) {
+    @RequestMapping("/listDevice")
+    public ListResult listDevice(PageParams pageParams) {
         return deviceService.listDevice(pageParams);
     }
 
 
-    @PostMapping("/updateDevice")
-    public Result updateDevice(@RequestBody Device device) {
+    @RequestMapping("/updateDevice")
+    public Result updateDevice(Device device) {
         return deviceService.updateDevice(device);
     }
 
-    @GetMapping("/selectManagement/{id}")
+    @RequestMapping("/selectManagement/{id}")
     public Result selectManagement(@PathVariable("id") int id) {
         return deviceService.selectManagement(id);
     }
 
 
 
-    @PostMapping("/addManagement")
+    @RequestMapping("/addManagement")
     public Result addManagement(String management_num, String device_num, String config_name) {
         return deviceService.addManagement(management_num, device_num, config_name);
     }
@@ -62,9 +63,14 @@ public class DeviceController {
      * @param id
      * @return
      */
-    @GetMapping("/selectDeviceMsg/{id}")
+    @RequestMapping("/selectDeviceMsg/{id}")
     public Result selectDeviceMsg(@PathVariable("id") int id) {
         return deviceService.selectDeviceMsgById(id);
+    }
+
+    @RequestMapping("/selectDepartments")
+    public Result selectDepartments() {
+        return deviceService.selectDepartments();
     }
 
 }

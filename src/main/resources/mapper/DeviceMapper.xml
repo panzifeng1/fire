@@ -4,10 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jyu.fire.mapper.DeviceMapper">
 
-    <select id="selectById" resultMap="deviceMsg">
-        select * from device where id=#{id}
-    </select>
-
     <resultMap id="deviceMsg" type="com.jyu.fire.pojo.Device">
         <result column="config" typeHandler="com.baomidou.mybatisplus.extension.handlers.FastjsonTypeHandler" property="config"/>
     </resultMap>
@@ -35,8 +31,21 @@
     </delete>
 
 
+    <select id="selectCountByStatus" resultType="int">
+        select count(*) from device where status=#{status}
+    </select>
 
 
+    <select id="selectStatusById" resultType="int">
+        select status from device where id=#{id}
+    </select>
 
+    <select id="selectByNum" resultMap="deviceMsg">
+        select * from device where num=#{num}
+    </select>
+
+    <select id="selectLastOne" resultMap="deviceMsg">
+        select * from device order by id desc limit 1;
+    </select>
 
 </mapper>
