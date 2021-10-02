@@ -16,6 +16,8 @@ import Message from './components/equipment/equipDetails/Message.vue'
 import Notice from './components/equipment/equipDetails/Notice.vue'
 import Preset from './components/equipment/equipDetails/Preset.vue'
 import Visual from './components/equipment/equipDetails/Visual.vue'
+import Sett from './components/equipment/equipDetails/notices/Sett.vue'
+import Record from './components/equipment/equipDetails/notices/Record.vue'
 Vue.use(Router)
 
 const router = new Router({
@@ -42,6 +44,8 @@ const router = new Router({
         { path: '/looklist/:id/notice', component: Notice },
         { path: '/looklist/:id/preset', component: Preset },
         { path: '/looklist/:id/visual', component: Visual },
+        { path: '/looklist/:id/notice/set', component: Sett },
+        { path: '/looklist/:id/notice/record', component: Record },
       ]
     }
   ]

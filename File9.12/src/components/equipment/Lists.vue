@@ -7,15 +7,15 @@
    </el-breadcrumb>
 
 <el-card class="box-card">
-  <div  class="text item">
-    <el-row :gutter="20">
-       <el-col :span="6">
+ 
+    <el-row :gutter="20" style="width:900px">
+       <el-col :span="5">
          <div class="grid-content bg-purple">
            <h4>全部设备</h4>
            <p>{{total}}</p>
          </div>
         </el-col>
-       <el-col :span="6">
+       <el-col :span="5">
          <div class="grid-content bg-purple">
           <el-badge is-dot class="item1" type="success">
             <h4>在线</h4>
@@ -23,45 +23,38 @@
           <p>{{onlineNum}}</p>
          </div>
         </el-col>
-       <el-col :span="6">
+       <el-col :span="5">
          <div class="grid-content bg-purple">
             <el-badge is-dot class="item1" type="danger"><h4>离线</h4></el-badge>
              <p>{{uplineNum}}</p>
          </div>
         </el-col>
-       <el-col :span="6">
+       <el-col :span="5">
          <div class="grid-content bg-purple">
            <el-badge is-dot class="item1" type="primary"><h4>未激活</h4></el-badge>
             <p>{{nolineNum}}</p>
           </div>
         </el-col>
+        <div class="upload">
+           <el-link  icon="el-icon-refresh" :underline="false" style="font-size: 24px" @click="getEquipList()"></el-link>
+         
+        </div>
     </el-row>
-  </div>
+
+ 
 </el-card>
 
  <el-card>
-  <!-- <span class="demonstration">单选选择任意一级选项</span> -->
-<!-- <div class="block">
-  <el-cascader
-    :options="options"
-    :props="{ checkStrictly: true }"
-    size="small"
-    clearable >
-  </el-cascader>
-  <el-input
-  placeholder="请输入内容"
-  v-model="input"
-  clearable width="50px">
-</el-input>
-</div> -->
-<div style="margin: 20px 0px;">
-  <el-input placeholder="请输入内容" v-model="input3" class="input-with-select"  >
-    <el-select v-model="select" slot="prepend" placeholder="请选择">
-      <el-option label="餐厅名" value="1"></el-option>
-      <el-option label="订单号" value="2"></el-option>
-      <el-option label="用户电话" value="3"></el-option>
+ 
+<div style="margin: 15px 0;">
+  <!-- queryInfo.query:搜索关键字 -->
+  <el-input placeholder="请输入内容" v-model="queryInfo.query" class="input-with-select">
+    <el-select v-model="select" slot="prepend" placeholder="请选择" style="width:110px">
+      <el-option label="设备号" value="1"></el-option>
+      <el-option label="设备名" value="2"></el-option>
+      <el-option label="设备类型" value="3"></el-option>
     </el-select>
-    <el-button slot="append" icon="el-icon-search"></el-button>
+    <el-button slot="append" icon="el-icon-search" @click="getEquipList"></el-button>
   </el-input>
 </div>
     <el-button type="primary" @click="addDialogVisible = true">添加设备</el-button>
@@ -72,8 +65,23 @@
       <el-table-column type="index" label="序号"  width="100px" align="center"></el-table-column>
       <el-table-column prop="num" label="设备号"   width="120px" align="center"> </el-table-column>
       <el-table-column  prop="name"  label="设备名" width="120px" align="center"> </el-table-column>
-      <el-table-column prop="type.name" label="设备类型" width="120px" align="center"> </el-table-column>
-      <el-table-column  prop="status" label="状态"  width="120px" align="center">  </el-table-column>  <el-table-column  prop="note"  label="说明"  width="200px" align="center">  </el-table-column>
+      
+      <el-table-column prop="deviceType.typeName" label="设备类型" width="120px" align="center"> </el-table-column>
+    
+      <el-table-column label="状态" width="120px" align="center">
+        <template slot-scope="scope">
+          <div v-if="scope.row.status == '0' ">
+             <div class="status-point" style=" background-color:#009FCC" /> 未激活
+          </div>
+          <div v-if="scope.row.status == '1'">
+             <div class="status-point" style=" background-color:#FF0000" /> 离线
+          </div>
+          <div v-if="scope.row.status == '2' ">
+             <div class="status-point" style=" background-color:#67C23A" /> 在线
+          </div>
+        </template>
+     </el-table-column>
+<el-table-column  prop="note"  label="说明"  width="200px" align="center"></el-table-column>
       <el-table-column label="操作" width="300px" align="center">
         <template slot-scope="scope">
         <!-- 获取每个数组里的所有数据 -->
@@ -106,28 +114,29 @@
   width="50%" @close="addDialogClosed">
   <!-- 内容主体区域 -->
   <el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="80px" >
-   <el-form-item label="设备号" prop="equipnum">
-     <el-input v-model="addForm.equipnum"></el-input>
+    <!-- prop:验证规则 -->
+   <el-form-item label="设备号" prop="num">
+     <el-input v-model="addForm.num"></el-input>
    </el-form-item>
-   <el-form-item label="设备名" prop="equipname">
-     <el-input v-model="addForm.equipname"></el-input>
+   <el-form-item label="设备名" prop="name">
+     <el-input v-model="addForm.name"></el-input>
    </el-form-item>
-  <el-form-item label="设备类型" prop="equiptype">
-    <el-radio-group v-model="addForm.equiptype">
-      <el-radio label="一般设备"></el-radio>
-      <el-radio label="海康威视"></el-radio>
-      <el-radio label="大华"></el-radio>
-    </el-radio-group>
-  </el-form-item>
-  <!-- <el-form-item label="状态" prop="equipstatus">
-    <el-radio-group v-model="addForm.equipstatus">
-      <el-radio label="0:未启用"></el-radio>
-      <el-radio label="1:离线"></el-radio>
-      <el-radio label="2:在线"></el-radio>
-    </el-radio-group>
-  </el-form-item> -->
-   <el-form-item label="说明" prop="equipexplain">
-    <el-input type="textarea" v-model="addForm.equipexplain"></el-input>
+
+   <el-form-item label="设备类型" prop="type">
+    <template>
+  <el-select v-model="addForm.type" clearable placeholder="请选择部门类型">
+    <el-option
+      v-for="item in typeLists"
+      :key="item.id"
+      :label="item.name"
+      :value="item.id">
+    </el-option>
+  </el-select>
+</template>
+  </el-form-item> 
+   
+   <el-form-item label="说明" prop="note">
+    <el-input type="textarea" v-model="addForm.note"></el-input>
   </el-form-item>
   </el-form>
   <!-- 底部区域 -->
@@ -151,9 +160,9 @@
    <el-form-item label="设备名"  prop="name">
     <el-input v-model="editForm.name"></el-input>
   </el-form-item>
-   <!-- <el-form-item label="设备类型" prop="typeName">
-    <el-input v-model="editForm.type.name"></el-input>
-  </el-form-item> -->
+   <el-form-item label="设备类型" prop="typeName">
+    <el-input v-model="editForm.typeName"></el-input>
+  </el-form-item>
    <el-form-item label="说明" prop="note">
     <el-input type="textarea" v-model="editForm.note"></el-input>
   </el-form-item>
@@ -171,38 +180,24 @@
 export default {
   data() {
     return {
-      // activeName: 'second',
-      // options: [
-      //   {
-      //     value: 'shebeihao',
-      //     label: '设备号'
-      //   },
-      //   {
-      //     value: 'shebeiming',
-      //     label: '设备名'
-      //   },
-      //   {
-      //     value: 'shebeileixing',
-      //     label: '设备类型',
-      //     children: [
-      //       {
-      //         value: 'normal',
-      //         label: '一般设备'
-      //       },
-      //       {
-      //         value: 'haikangweishi',
-      //         label: '海康威视'
-      //       },
-      //       {
-      //         value: 'dahua',
-      //         label: '大华'
-      //       }
-      //     ]
-      //   }
-      // ],
-      // 获取设备列表参数对象
-      input3: '',
       select: '',
+      // 添加设备中选择设备类型的下拉框
+      typeLists: [
+        {
+          id: '0',
+          name: '一般设备'
+        },
+        {
+          id: '1',
+          name: '海康威视'
+        },
+        {
+          id: '2',
+          name: '大华'
+        }
+      ],
+      id: '',
+      // 获取设备列表参数对象
       queryInfo: {
         query: '',
         // 当前页数
@@ -214,7 +209,7 @@ export default {
       equipInfo: {
         num: '',
         name: '',
-        typeId: '',
+        type: '',
         note: ''
       },
       equiplist: [],
@@ -232,43 +227,43 @@ export default {
       addDialogVisible: false,
       // 添加设备的表单数据
       addForm: {
-        equipnum: '',
-        equipname: '',
-        equiptype: '',
-        equipstatus: '',
-        equipexplain: ''
+        num: '',
+        name: '',
+        type: '',
+        // equipstatus: '',
+        note: ''
       },
       // // 添加设备表单的验证规则对象
       addFormRules: {
-        equipnum: [
+        num: [
           {
             required: true,
             message: '请输入设备号',
             trigger: 'blur'
           }
         ],
-        equipname: [
+        name: [
           {
             required: true,
             message: '请输入设备名',
             trigger: 'blur'
           }
         ],
-        equiptype: [
+        type: [
           {
             required: true,
             message: '请选择设备类型',
             trigger: 'blur'
           }
         ],
-        equipstatus: [
-          {
-            required: true,
-            message: '请选择设备状态',
-            trigger: 'blur'
-          }
-        ],
-        equipexplain: [
+        // equipstatus: [
+        //   {
+        //     required: true,
+        //     message: '请选择设备状态',
+        //     trigger: 'blur'
+        //   }
+        // ],
+        note: [
           {
             required: true,
             message: '请输入说明',
@@ -279,15 +274,23 @@ export default {
       // 控制 编辑设备 对话框 的显示与隐藏
       editDialogVisible: false,
       // 查询到的设备信息对象（用来保存设备信息）
-      editForm: {},
+      editForm: {
+        id: '',
+        num: '',
+        name: '',
+        typeName: '',
+        typeId: '',
+        note: '',
+        status: ''
+      },
       editName: '',
       // 编辑设备对话框验证规则对象
       editFormRules: {
         num: [{ required: true, message: '请输入设备号', trigger: 'blur' }],
         name: [{ required: true, message: '请输入设备名', trigger: 'blur' }],
-        // typeName: [
-        //   { required: true, message: '请输入设备类型', trigger: 'blur' }
-        // ],
+        typeName: [
+          { required: true, message: '请输入设备类型', trigger: 'blur' }
+        ],
         note: [{ required: true, message: '请输入设备说明', trigger: 'blur' }]
       }
     }
@@ -304,7 +307,10 @@ export default {
       })
       this.equiplist = res.data
       this.total = res.total
-      console.log(res)
+      this.onlineNum = res.onLine
+      this.uplineNum = res.offLine
+      this.nolineNum = res.notActive
+      console.log('设备列表：', res)
     },
     // 监听pageSize 改变的事件
     handleSizeChange(newSize) {
@@ -326,14 +332,14 @@ export default {
     },
     // 添加设备 “确定”按钮 表单预校验,看你表单有没有全填
     addEquip() {
-      // 拿到整个表单的引用对象
+      // 拿到整个表单的引用对象 进行预校验
       this.$refs.addFormRef.validate(async valid => {
         console.log(valid)
         if (!valid) return
         // 预校验通过了，可以发起真正的添加设备的网络请求
         const { data: res } = await this.$http.post(
           'device/addDevice',
-          this.equipInfo
+          this.addForm
         )
         console.log(res)
         this.$message.success('添加用户成功')
@@ -382,8 +388,15 @@ export default {
     async showEditDialog(data) {
       console.log(data.id)
       console.log(data)
-      this.editForm = data
-      this.editName = data.name
+      // this.editForm = data
+      this.editForm.id = data.id
+      this.editForm.num = data.num
+      this.editForm.name = data.name
+      this.editForm.typeName = data.deviceType.typeName
+      this.editForm.typeId = data.deviceType.typeId
+      this.editForm.note = data.note
+      this.editForm.status = data.status
+      // this.editName = data.name
       // this.editForm = scope.row
       // 动态数据 用字符串拼接
       // const { data: res } = await this.$http.get('device/seeDevice/' + 'id')
@@ -402,18 +415,22 @@ export default {
         console.log(valid) //true时通过
         if (!valid) return //校验不通过 直接return
         // 通过了 发起修改管理员信息的数据请求
-        const { data: res } = await this.$http.post(
-          'device/updateDevice/' + this.editForm.id,
+        const { data: res } = await this.$http.put(
+          'device/updateDevice',
+          // 提交一个用户的信息
           {
+            id: this.editForm.id,
             num: this.editForm.num,
             name: this.editForm.name,
-            note: this.editForm.note
+            note: this.editForm.note,
+            status: this.editForm.status,
+            type: this.editForm.typeId
           }
         )
         console.log(res)
         console.log(res.id)
         this.editDialogVisible = false
-        // this.getEquipList()
+        this.getEquipList()
         this.$message.success('更新设备成功')
       })
     },
@@ -436,9 +453,9 @@ export default {
 // .el-select .el-input {
 //   width: 130px;
 // }
-// .el-select .el-input {
-//   width: 130px ;
-// }
+.el-select .el-input {
+  width: 200px;
+}
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
 }
@@ -481,5 +498,14 @@ export default {
 .box-card h4 {
   margin: 0px;
   padding: 0px;
+}
+.upload {
+  margin: 10px;
+}
+.status-point {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
 }
 </style>
