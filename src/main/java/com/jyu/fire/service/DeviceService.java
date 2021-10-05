@@ -2,6 +2,7 @@ package com.jyu.fire.service;
 
 import com.jyu.fire.pojo.Device;
 import com.jyu.fire.pojo.ManagementDeviceRel;
+import com.jyu.fire.vo.DeviceConfigVo;
 import com.jyu.fire.vo.ListResult;
 import com.jyu.fire.vo.Result;
 import com.jyu.fire.vo.params.PageParams;
@@ -42,4 +43,6 @@ public interface DeviceService {
 
     //查看设备配置
     Result selectConfig(int id);
+
+
 }

@@ -5,6 +5,7 @@ import com.jyu.fire.pojo.ManagementDeviceRel;
 import com.jyu.fire.service.DeviceService;
 import com.jyu.fire.service.ListMsgTypeService;
 import com.jyu.fire.service.ManagementService;
+import com.jyu.fire.vo.DeviceConfigVo;
 import com.jyu.fire.vo.ErrorCode;
 import com.jyu.fire.vo.ListResult;
 import com.jyu.fire.vo.Result;
@@ -110,4 +111,9 @@ public class DeviceController {
         return deviceService.selectConfig(id);
     }
 
+
+    @RequestMapping("/updateConfig")
+    public Result updateConfig(Device device) {
+        return deviceService.updateDevice(device);
+    }
 }

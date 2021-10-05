@@ -205,9 +205,22 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Result selectConfig(int id) {
-
-        return null;
+        Device device = deviceMapper.selectById(id);
+        DeviceConfigVo deviceConfigVo = copyToConfig(device);
+        if (deviceConfigVo != null) {
+            return Result.success(deviceConfigVo);
+        }
+        return Result.fail("找不到该设备的相关配置信息");
     }
+
+
+
+    private DeviceConfigVo copyToConfig(Device device) {
+        DeviceConfigVo deviceConfigVo = new DeviceConfigVo();
+        BeanUtils.copyProperties(device,deviceConfigVo);
+        return deviceConfigVo;
+    }
+
 
     /**
      * 判断数据库中是否已经存在该设备，存在返回true，不存在返回false
