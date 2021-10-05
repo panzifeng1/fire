@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MsgType {
-    private Integer code;
-    private String type;
+    private Integer type;
+    private String typeName;
 }

@@ -2,6 +2,7 @@ package com.jyu.fire.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jyu.fire.pojo.Management;
+import com.jyu.fire.vo.ManagementDeviceVo;
 import com.jyu.fire.vo.ManagementVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
@@ -18,4 +19,6 @@ public interface ManagementMapper extends BaseMapper<Management> {
     List<Management> select(Management management);
 
     Management selectByNum(String num);
+
+    List<ManagementDeviceVo> listIdAndName();
 }

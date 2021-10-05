@@ -8,10 +8,7 @@ import com.jyu.fire.pojo.Device;
 import com.jyu.fire.pojo.Management;
 import com.jyu.fire.service.DepartmentService;
 import com.jyu.fire.service.ManagementService;
-import com.jyu.fire.vo.DeviceVo;
-import com.jyu.fire.vo.ListManagementResult;
-import com.jyu.fire.vo.ManagementVo;
-import com.jyu.fire.vo.Result;
+import com.jyu.fire.vo.*;
 import com.jyu.fire.vo.params.PageParams;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +38,13 @@ public class ManagementServiceImpl implements ManagementService {
         long current = managementPage.getCurrent();
         long pages = managementPage.getPages();
         return ListManagementResult.success(managementVoList,total,current,pages);
+    }
+
+    @Override
+    public Result listManagementForDevice() {
+        List<ManagementDeviceVo> managementDeviceVos = managementMapper.listIdAndName();
+
+        return Result.success(managementDeviceVos);
     }
 
     @Override

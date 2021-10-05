@@ -19,13 +19,17 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 //@ConfigurationProperties(prefix = "mqtt")
-//@PropertySource(value = "config.properties")
+//@PropertySource("classpath:config.properties")
 public class MQTTConnect {
  
     private String HOST = "tcp://172.22.16.245:1883"; //mqtt服务器的地址和端口号
+//    @Value("${mqtt.HOST}")
+//    private String HOST; //mqtt服务器的地址和端口号
     private final String clientId = "DC" + (int) (Math.random() * 100000000);
     private MqttClient mqttClient;
     private int qos = 1;
+//    @Value("${mqtt.qos}")
+//    private int qos;
     /**
      * 客户端connect连接mqtt服务器
      *

@@ -3,6 +3,8 @@ package com.jyu.fire.controller;
 import com.jyu.fire.pojo.Device;
 import com.jyu.fire.pojo.ManagementDeviceRel;
 import com.jyu.fire.service.DeviceService;
+import com.jyu.fire.service.ListMsgTypeService;
+import com.jyu.fire.service.ManagementService;
 import com.jyu.fire.vo.ErrorCode;
 import com.jyu.fire.vo.ListResult;
 import com.jyu.fire.vo.Result;
@@ -17,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class DeviceController {
     @Autowired
     private DeviceService deviceService;
+    @Autowired
+    private ManagementService managementService;
+    @Autowired
+    private ListMsgTypeService listMsgTypeService;
 
     @RequestMapping("/addDevice")
     public Result insert(@RequestBody Device device) {
@@ -60,9 +66,7 @@ public class DeviceController {
 
 
     /**
-     * 根据设备id查询出该设备相应的信息
-     * @param id
-     * @return
+     * 查询设备告警信息
      */
     @RequestMapping("/selectDeviceMsg/{id}")
     public Result selectDeviceMsg(@PathVariable("id") int id) {
@@ -72,6 +76,38 @@ public class DeviceController {
     @RequestMapping("/selectDepartments")
     public Result selectDepartments() {
         return deviceService.selectDepartments();
+    }
+
+    /**
+     * 查询出关联人列表
+     */
+    @RequestMapping("/listManagement")
+    public Result listManagement() {
+        return managementService.listManagementForDevice();
+    }
+
+    /**
+     * 通知方式列表
+     */
+    @RequestMapping("/listInformType")
+    public Result listInformType() {
+        return deviceService.MsgConfigList();
+    }
+
+    /**
+     * 消息类型列表
+     */
+    @RequestMapping("/listMsgType")
+    public Result listMsgType() {
+        return listMsgTypeService.listMsgType();
+    }
+
+    /**
+     * 查看设备配置
+     */
+    @RequestMapping("/selectConfig/{id}")
+    public Result selectConfig(@PathVariable("id") int id) {
+        return deviceService.selectConfig(id);
     }
 
 }

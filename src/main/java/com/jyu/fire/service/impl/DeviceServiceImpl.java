@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jyu.fire.mapper.DepartmentMapper;
-import com.jyu.fire.mapper.DeviceMapper;
-import com.jyu.fire.mapper.DeviceMsgMapper;
-import com.jyu.fire.mapper.ManagementDeviceRelMapper;
+import com.jyu.fire.mapper.*;
 import com.jyu.fire.pojo.*;
 import com.jyu.fire.service.DepartmentService;
 import com.jyu.fire.service.DeviceService;
@@ -34,6 +31,8 @@ public class DeviceServiceImpl implements DeviceService {
     private DepartmentMapper departmentMapper;
     @Autowired
     private ManagementDeviceRelMapper managementDeviceRelMapper;
+    @Autowired
+    private MsgConfigMapper msgConfigMapper;
 
     @Override
     public Result insert(Device device) {
@@ -153,9 +152,9 @@ public class DeviceServiceImpl implements DeviceService {
     public Result addManagement(ManagementDeviceRel managementDeviceRel) {
         Integer managementId = managementDeviceRel.getManagementId();
         Integer deviceId = managementDeviceRel.getDeviceId();
-        List<MsgCfg> msgCfg = managementDeviceRel.getMsgCfg();
+        List msgCfg = managementDeviceRel.getMsgCfg();
         String s = JSON.toJSONString(msgCfg);
-        List<MsgType> msgType = managementDeviceRel.getMsgType();
+        List msgType = managementDeviceRel.getMsgType();
         String s1 = JSON.toJSONString(msgType);
 
         //插入之前先在数据库中查询该设备是否已经关联了某个关联人
@@ -197,6 +196,19 @@ public class DeviceServiceImpl implements DeviceService {
         return Result.success(departmentNameAndIds);
     }
 
+    @Override
+    public Result MsgConfigList() {
+        List<MsgConfig> msgConfigs = msgConfigMapper.selectList(null);
+        List<ListMsgConfigVo> listMsgConfigVos = copyMsgList(msgConfigs);
+        return Result.success(listMsgConfigVos);
+    }
+
+    @Override
+    public Result selectConfig(int id) {
+
+        return null;
+    }
+
     /**
      * 判断数据库中是否已经存在该设备，存在返回true，不存在返回false
      */
@@ -218,8 +230,11 @@ public class DeviceServiceImpl implements DeviceService {
         DeviceVo deviceVo = new DeviceVo();
         //将device的内容copy到vo对象中
         BeanUtils.copyProperties(device,deviceVo);
-        String departmentName = departmentMapper.selectDepartmentNameById(device.getDepartmentId());
-        deviceVo.setDepartment(departmentName);
+        if (device.getDepartmentId() != null) {
+            String departmentName = departmentMapper.selectDepartmentNameById(device.getDepartmentId());
+            deviceVo.setDepartment(departmentName);
+        }
+
         //设备类型
         DeviceType deviceType = new DeviceType();
         Integer type = device.getType();
@@ -245,5 +260,17 @@ public class DeviceServiceImpl implements DeviceService {
         return managementVo;
     }
 
+    private List<ListMsgConfigVo> copyMsgList(List<MsgConfig> records) {
+        List<ListMsgConfigVo> msgConfigs = new ArrayList<>();
+        for (MsgConfig record : records) {
+            msgConfigs.add(copy(record));
+        }
+        return msgConfigs;
+    }
 
+    private ListMsgConfigVo copy(MsgConfig msgConfig) {
+        ListMsgConfigVo listMsgConfigVo = new ListMsgConfigVo();
+        BeanUtils.copyProperties(msgConfig,listMsgConfigVo);
+        return listMsgConfigVo;
+    }
 }

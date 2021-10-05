@@ -31,4 +31,8 @@
         select * from management
         where num=#{num}
     </select>
+
+    <select id="listIdAndName" resultType="com.jyu.fire.vo.ManagementDeviceVo">
+        select id,name from management
+    </select>
 </mapper>

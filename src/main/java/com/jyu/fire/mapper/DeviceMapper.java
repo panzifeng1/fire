@@ -27,4 +27,6 @@ public interface DeviceMapper extends BaseMapper<Device> {
     Device selectByNum(String num);
 
     Device selectLastOne();
+
+
 }

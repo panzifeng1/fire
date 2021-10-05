@@ -1,4 +1,4 @@
-package com.jyu.fire.pojo;
+package com.jyu.fire.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MsgCfg {
+public class ListMsgConfigVo {
     private Integer id;
+    private String name;
 }

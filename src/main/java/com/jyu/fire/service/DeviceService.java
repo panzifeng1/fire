@@ -36,4 +36,10 @@ public interface DeviceService {
 
     //查询所有部门id和部门名称
     Result selectDepartments();
+
+    //查询通知方式列表
+    Result MsgConfigList();
+
+    //查看设备配置
+    Result selectConfig(int id);
 }

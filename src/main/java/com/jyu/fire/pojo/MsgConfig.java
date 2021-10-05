@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -19,7 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @TableName(autoResultMap = true)
 public class MsgConfig {
-    private BigInteger id;
+    private Integer id;
     private String name;
     private int type;
     private String provider;
@@ -29,5 +30,5 @@ public class MsgConfig {
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
+    private LocalDateTime createTime;
 }

@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -20,14 +21,19 @@ import java.util.Date;
 public class DeviceMsg {
     @TableId(type = IdType.AUTO)
     private Long id;
-    private BigInteger deviceId;
+    private Integer deviceId;
     private Integer type;
     @TableField(typeHandler = JacksonTypeHandler.class)
     private JSONObject msg;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @TableField(fill = FieldFill.INSERT)
-    private Date createTime;
-    private String addr;
+    private LocalDateTime createTime;
 
+    public DeviceMsg(Integer deviceId,Integer type,String msg) {
+        this.deviceId = deviceId;
+        this.type = type;
+        Object o = JSONObject.toJSON(msg);
+        this.msg = (JSONObject) o;
+    }
 }
